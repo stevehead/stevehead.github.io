@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html ng-app="gsfftracker">
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+        <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
+        <script src="/gs/fftracker/js/db.js"></script>
+        <script src="/gs/fftracker/js/services.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    </head>
+    <body>
+        <form name="punchForm" ng-controller="PunchController as punchCtrl" ng-submit="punchCtrl.addPunch()">
+            <button type="submit" ng-click="punchCtrl.punch = 'clockOn'" ng-show="canClockOn">Clock On</buttson>
+            <button type="submit" ng-click="punchCtrl.punch = 'startMeal'" ng-show="canStartMeal">Start Meal</button>
+            <button type="submit" ng-click="punchCtrl.punch = 'endMeal'" ng-show="canEndMeal">End Meal</button>
+            <button type="submit" ng-click="punchCtrl.punch = 'clockOff'" ng-show="canClockOff">Clock Off</button>
+        </form>
+
+        <div ng-controller="JobsController as jobsCtrl">
+            <ul>
+                <li ng-repeat="job in activeJobs">
+                    <strong>{{ job.startTime | date:'h:MM a' }}</strong> {{ job.lmiId }} - {{ job.description }}
+                </li>
+            </ul>
+        </div>
+
+        <form name="newJobForm" ng-controller="NewJobController as newJobCtrl" ng-submit="newJobCtrl.addJob()" ng-show="canWork">
+            LMI ID: <input type="text" ng-model="newJobCtrl.newJob.lmiId" /><br />
+            TANG ID: <input type="text" ng-model="newJobCtrl.newJob.tangId" /><br />
+            Description: <textarea ng-model="newJobCtrl.newJob.description"></textarea><br />
+            Source:
+            <select ng-model="newJobCtrl.newJob.pulledFrom" ng-init="newJobCtrl.newJob.pulledFrom='queue'">
+                <option value="queue">Queue</option>
+                <option value="handoff">Handoff</option>
+                <option value="selfCreated">Self Created</option>
+            </select><br />
+            <button type="submit">Create Job</button>
+        </form>
+
+        <div ng-controller="CalendarController as calendarCtrl">
+            <div ng-repeat="day in days">
+                <h3>{{ day.date | date:'EEEE' }} ({{ day.date | date:'shortDate' }})</h3>
+                <div ng-repeat="job in day.jobs">
+                    {{ job.lmiId }} - {{ job.description }}
+                </div>
+            </div>
+        </div>
+        <script src="/gs/fftracker/js/app.js"></script>
+    </body>
+</html>
