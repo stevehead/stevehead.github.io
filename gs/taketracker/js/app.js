@@ -54,7 +54,7 @@
                 {
                     var take = {};
                     take.startTime = normalStartTime + i * normalTakeInterval;
-                    take.endTime = startTime + (i + 1) * normalTakeInterval;
+                    take.endTime = normalStartTime + (i + 1) * normalTakeInterval;
                     if (now < take.endTime)
                     {
                         cont = false;
