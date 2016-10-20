@@ -6,6 +6,7 @@
 
     app.controller('MainController', function($scope, $interval) {
         $scope.takes = [];
+        $scope.cTakes = [];
         $scope.process = function () {
             var now = Date.now();
             var startTime = Date.parse($scope.startTime);
@@ -71,7 +72,24 @@
                     if (!cont) break;
                 }
             }
+
+            var cTakes = [];
+            var tClass;
+            var takeRate = $scope.currentTakes / ((now - startTime) / (3600 * 1000));
+            var tWidth = 100 / targetTakes;
+            if (takeRate < 1.6)  tClass = 'progress-bar-danger';
+            else if (takeRate < 1.8) tClass = 'progress-bar-warning';
+            else if (takeRate < 2.0) tClass = 'progress-bar-info';
+            else tClass = 'progress-bar-success';
+            for (i = 0; i < $scope.currentTakes; i++)
+            {
+                var take = {};
+                take.width = tWidth;
+                take.class = tClass;
+                cTakes.push(take);
+            }
             $scope.takes = takes;
+            $scope.cTakes = cTakes;
         };
 
 
