@@ -16,7 +16,7 @@
 
             var workHours = ($scope.meal) ? $scope.hours - 0.5 : $scope.hours;
             var takeHours = $scope.hours - 0.5;
-            var targetTakes = Math.ceil(MIN_TAKE * workHours);
+            var targetTakes = Math.ceil($scope.targetTakeRate * workHours);
             var normalTakes = targetTakes - INIT_TAKES;
 
             var normalTakeInterval = ((takeHours - 0.5) / normalTakes) * 3600 * 1000;
@@ -26,12 +26,13 @@
             var takes = [];
 
             var cont = true;
-            var totalWidth = 0;
+            var shouldHaveTakes = 0;
             for (i = 0; i < 3; i++)
             {
                 var take = {};
                 take.startTime = startTime + (i - 1) * INIT_TAKE_INTERVAL;
                 take.endTime = startTime + i * INIT_TAKE_INTERVAL;
+                var takeCloseTime = take.endTime - 0.2 * INIT_TAKE_INTERVAL;
 
                 if (now < take.endTime)
                 {
@@ -40,10 +41,32 @@
                 }
                 else
                 {
+                    shouldHaveTakes++;
                     take.width = 100 * INIT_TAKE_INTERVAL / totalTime;
                 }
-                totalWidth += take.width;
-                take.class = (now >= take.endTime) ? 'progress-bar-success' : '';
+
+                if (now >= take.endTime)
+                {
+                    if (shouldHaveTakes > $scope.currentTakes)
+                    {
+                        take.class = 'progress-bar-danger';
+                    }
+                    else
+                    {
+                        take.class = 'progress-bar-success';
+                    }
+                }
+                else
+                {
+                    if (shouldHaveTakes > $scope.currentTakes && now >= takeCloseTime)
+                    {
+                        take.class = 'progress-bar-warning';
+                    }
+                    else
+                    {
+                        take.class = '';
+                    }
+                }
                 takes.push(take);
 
                 if (!cont) break;
@@ -56,6 +79,7 @@
                     var take = {};
                     take.startTime = normalStartTime + i * normalTakeInterval;
                     take.endTime = normalStartTime + (i + 1) * normalTakeInterval;
+                    var takeCloseTime = take.endTime - 0.2 * normalTakeInterval;
                     if (now < take.endTime)
                     {
                         cont = false;
@@ -63,10 +87,31 @@
                     }
                     else
                     {
+                        shouldHaveTakes++;
                         take.width = 100 * normalTakeInterval / totalTime;
                     }
-                    totalWidth += take.width;
-                    take.class = (now >= take.endTime) ? 'progress-bar-success' : '';
+                    if (now >= take.endTime)
+                    {
+                        if (shouldHaveTakes > $scope.currentTakes)
+                        {
+                            take.class = 'progress-bar-danger';
+                        }
+                        else
+                        {
+                            take.class = 'progress-bar-success';
+                        }
+                    }
+                    else
+                    {
+                        if (shouldHaveTakes > $scope.currentTakes && now >= takeCloseTime)
+                        {
+                            take.class = 'progress-bar-warning';
+                        }
+                        else
+                        {
+                            take.class = '';
+                        }
+                    }
                     takes.push(take);
 
                     if (!cont) break;
@@ -97,6 +142,7 @@
         $scope.hours = 8;
         $scope.meal = true;
         $scope.currentTakes = 0;
+        $scope.targetTakeRate = MIN_TAKE;
         $scope.process();
 
         $interval(function() {$scope.process()}, 5000);
