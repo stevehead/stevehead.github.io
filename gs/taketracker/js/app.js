@@ -17,6 +17,7 @@
             var workHours = ($scope.meal) ? $scope.hours - 0.5 : $scope.hours;
             var takeHours = $scope.hours - 0.5;
             var targetTakes = Math.ceil($scope.targetTakeRate * workHours);
+            $scope.targetTakes = targetTakes;
             var normalTakes = targetTakes - INIT_TAKES;
 
             var normalTakeInterval = ((takeHours - 0.5) / normalTakes) * 3600 * 1000;

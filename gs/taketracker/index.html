@@ -8,11 +8,18 @@
     </head>
     <body>
         <div ng-controller="MainController">
-            Start Time: <input type="input" ng-model="startTime"  ng-change="process()" /><br />
-            Hours to Work: <input type="number" ng-model="hours"  ng-change="process()" /><br />
-            Taking Meal: <input type="checkbox" ng-model="meal"  ng-change="process()" /><br />
-            Target Take Rate: <input type="input" ng-model="targetTakeRate"  ng-change="process()" /><br />
-            Current Takes: <input type="number" ng-model="currentTakes"  ng-change="process()" /><br /><br />
+            <div class="row">
+                <div class="col-md-6">
+                    Start Time: <input type="input" ng-model="startTime"  ng-change="process()" /><br />
+                    Hours to Work: <input type="number" ng-model="hours"  ng-change="process()" /><br />
+                    Taking Meal: <input type="checkbox" ng-model="meal"  ng-change="process()" /><br />
+                    Target Take Rate: <input type="input" ng-model="targetTakeRate"  ng-change="process()" /><br />
+                    Current Takes: <input type="number" ng-model="currentTakes"  ng-change="process()" /><br /><br />
+                </div>
+                <div class="col-md-6">
+                    Target Takes: {{ targetTakes }}
+                </div>
+            </div>
 
             <div class="progress">
                 <div ng-repeat="(key, take) in takes" class="progress-bar {{ take.class }}" style="width: {{ take.width }}%">
