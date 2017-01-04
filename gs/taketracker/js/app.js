@@ -2,6 +2,7 @@
     const MIN_TAKE = 1.6;
     const INIT_TAKES = 3;
     const INIT_TAKE_INTERVAL = 900000;
+    const END_BUFFER = 1;
     var app = angular.module('gstaketracker', []);
 
     app.controller('MainController', function($scope, $interval) {
@@ -10,17 +11,21 @@
         $scope.process = function () {
             var now = Date.now();
             var startTime = Date.parse($scope.startTime);
-            if (!startTime) return;
+            var endTime = Date.parse($scope.endTime);
+            if (!startTime || !endTime) return;
             startTime = startTime.getTime();
+            endTime = endTime.getTime();
+            if (endTime < startTime) endTime += 24 * 3600 * 1000;
+
             var timeDifference = (now - startTime) / 1000;
 
-            var workHours = ($scope.meal) ? $scope.hours - 0.5 : $scope.hours;
+            var workHours = $scope.hours - $scope.breakMinutes / 60;
             var takeHours = $scope.hours - 0.5;
             var targetTakes = Math.ceil($scope.targetTakeRate * workHours);
             $scope.targetTakes = targetTakes;
             var normalTakes = targetTakes - INIT_TAKES;
 
-            var normalTakeInterval = ((takeHours - 0.5) / normalTakes) * 3600 * 1000;
+            var normalTakeInterval = ((takeHours - END_BUFFER) / normalTakes) * 3600 * 1000;
 
             var normalStartTime = startTime + (INIT_TAKES - 1) * INIT_TAKE_INTERVAL;
             var totalTime = INIT_TAKES * INIT_TAKE_INTERVAL + normalTakes * normalTakeInterval
@@ -121,7 +126,7 @@
 
             var cTakes = [];
             var tClass;
-            var takeRate = $scope.currentTakes / ((now - startTime) / (3600 * 1000));
+            var takeRate = $scope.currentTakes / ((now - startTime) / (3600 * 1000) - $scope.breakMinutes / 60);
             var tWidth = 100 / targetTakes;
             if (takeRate < 1.6)  tClass = 'progress-bar-danger';
             else if (takeRate < 1.8) tClass = 'progress-bar-warning';
@@ -140,8 +145,9 @@
 
 
         $scope.startTime = '9:00 AM';
+        $scope.endTime = '5:00 PM';
         $scope.hours = 8;
-        $scope.meal = true;
+        $scope.breakMinutes = 0;
         $scope.currentTakes = 0;
         $scope.targetTakeRate = MIN_TAKE;
         $scope.process();
