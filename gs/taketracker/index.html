@@ -7,28 +7,32 @@
         <script src="https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/datejs/date.js"></script>
     </head>
     <body>
-        <div ng-controller="MainController">
+        <div class="container" ng-controller="MainController">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-9">
                     Start Time: <input type="input" ng-model="startTime"  ng-change="process()" /><br />
                     Hours to Work: <input type="number" ng-model="hours"  ng-change="process()" /><br />
                     Taking Meal: <input type="checkbox" ng-model="meal"  ng-change="process()" /><br />
                     Target Take Rate: <input type="input" ng-model="targetTakeRate"  ng-change="process()" /><br />
                     Current Takes: <input type="number" ng-model="currentTakes"  ng-change="process()" /><br /><br />
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     Target Takes: {{ targetTakes }}
                 </div>
             </div>
 
-            <div class="progress">
-                <div ng-repeat="(key, take) in takes" class="progress-bar {{ take.class }}" style="width: {{ take.width }}%">
-                    {{ key + 1 }}
-                </div>
-            </div>
-            <div class="progress">
-                <div ng-repeat="(key, take) in cTakes" class="progress-bar {{ take.class }}" style="width: {{ take.width }}%">
-                    {{ key + 1 }}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="progress">
+                        <div ng-repeat="(key, take) in takes" class="progress-bar {{ take.class }}" style="width: {{ take.width }}%">
+                            {{ key + 1 }}
+                        </div>
+                    </div>
+                    <div class="progress">
+                        <div ng-repeat="(key, take) in cTakes" class="progress-bar {{ take.class }}" style="width: {{ take.width }}%">
+                            {{ key + 1 }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
