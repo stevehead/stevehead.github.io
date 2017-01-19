@@ -126,11 +126,11 @@
 
             var cTakes = [];
             var tClass;
-            var takeRate = $scope.currentTakes / ((now - startTime) / (3600 * 1000) - $scope.breakMinutes / 60);
+            $scope.takeRate = $scope.currentTakes / ((now - startTime) / (3600 * 1000) - $scope.breakMinutes / 60);
             var tWidth = 100 / targetTakes;
-            if (takeRate < 1.6)  tClass = 'progress-bar-danger';
-            else if (takeRate < 1.8) tClass = 'progress-bar-warning';
-            else if (takeRate < 2.0) tClass = 'progress-bar-info';
+            if ($scope.takeRate < 1.6)  tClass = 'progress-bar-danger';
+            else if ($scope.takeRate < 1.8) tClass = 'progress-bar-warning';
+            else if ($scope.takeRate < 2.0) tClass = 'progress-bar-info';
             else tClass = 'progress-bar-success';
             for (i = 0; i < $scope.currentTakes; i++)
             {
@@ -150,6 +150,7 @@
         $scope.breakMinutes = 0;
         $scope.currentTakes = 0;
         $scope.targetTakeRate = MIN_TAKE;
+        $scope.takeRate = 0;
         $scope.process();
 
         $interval(function() {$scope.process()}, 5000);

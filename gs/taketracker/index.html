@@ -18,7 +18,8 @@
                     Current Takes: <input type="number" ng-model="currentTakes"  ng-change="process()" /><br /><br />
                 </div>
                 <div class="col-md-3">
-                    Target Takes: {{ targetTakes }}
+                    Target Takes: {{ targetTakes }}<br />
+                    Current Take Rate: {{ takeRate | number:2 }}
                 </div>
             </div>
 
